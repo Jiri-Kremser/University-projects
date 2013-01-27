@@ -1,0 +1,3 @@
+AddHandler cgi-script .php
+AddType application/x-httpd-php .php
+AddDefaultCharset UTF-8

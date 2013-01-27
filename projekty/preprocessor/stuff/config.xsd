@@ -1,0 +1,260 @@
+<!-- XML Schema for config files of Shakespeare preprocessor desktop aplication.                   
+ XML instances of this schema specify the format of input file and prolog output file.         
+ Format of Shakespeare's plays is similar to XML, there is some meta information like          
+ position, scene, act, etc. Plays are available from http://oll.libertyfund.org                
+ or version by Mike Scott is available from http://www.lexically.net.                          
+ However, the preprocessor should be able to work with general texts.                          
+
+ Author: Jiri Kremser                                                                          
+
+ note: "Crossing" of metatypes is not allowed. For instance <meta1><meta2>text</meta1></meta2> 
+       Therefore the order of meta types is important, because of parsing the document.        
+       All text must have some value of all meta types. If no value is set, tha last value     
+       is used. For instance:                                                                  
+
+  schema:                                                                                      
+       <metaType><type>string</type><key>metaName</key><value>matched</value>                  
+         <matched>                                                                             
+           <valuesStartWith>                                                                   
+             <valueStartWith>meta1:</valueStartWith>                                           
+             <valueStartWith>meta2:</valueStartWith>                                           
+           </valuesStartWith>                                                                  
+         </matched>                                                                            
+       </metaType>                                                                             
+
+  text:                                                                                        
+       meta1: text1                                                                            
+       text2                                                                                   
+       meta2: text3                                                                            
+
+  In this case text1 has meta information 'meta1:', text 2 has also 'meta1:' and text3 'meta2:'-->
+
+
+
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="config" type="Config">
+        <xsd:unique name="uniqueKey">
+            <xsd:selector xpath="input/metaTypes/metaType"/>
+            <xsd:field xpath="key" />
+        </xsd:unique>
+        <xsd:unique name="uniqueIdentifier">
+            <xsd:selector xpath="output/predicateNames/predicate"/>
+            <xsd:field xpath="identifier" />
+        </xsd:unique>
+        <xsd:keyref name="myIdref" refer="uniqueKey">
+            <xsd:selector xpath="output/predicateNames/predicate/attributes/metaAttribute"/>
+            <xsd:field xpath="."/>
+        </xsd:keyref>
+    </xsd:element>
+
+
+    <xsd:complexType name="Config">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="input" type="Input"/>
+            <xsd:element name="output" type="Output"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Input">
+        <xsd:sequence>
+            <xsd:element name="tagger" type="Tagger"/>
+            <xsd:element name="ignore" type="Ignore"/>
+            <xsd:element name="metaTypes">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="metaType" type="Meta" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+
+
+    <xsd:complexType name="Ignore">
+        <xsd:all>
+            <xsd:element name="firstXLines" minOccurs="0" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="lastXLines" minOccurs="0" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="stopList" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:choice>
+                        <xsd:element name="file" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="word" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="value" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:choice>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="linesStartWith" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="lineStartWith" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="valuesBetween" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="valueBetween" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="initiator" type="xsd:string"/>
+                                    <xsd:element name="terminator" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="SGMLTags" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="tag" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="Meta">
+        <xsd:all>
+            <xsd:element name="type">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="string"/>
+                        <xsd:enumeration value="number"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="key" type="xsd:string"/>
+            <xsd:element name="value" type="xsd:string"/>
+            <xsd:element name="matches" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:all>
+                        <xsd:element name="valuesStartWith" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="valueStartWith" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                        <xsd:element name="SGMLTags" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:choice>
+                                    <xsd:element name="file" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="values" minOccurs="0">
+                                        <xsd:complexType>
+                                            <xsd:sequence>
+                                                <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
+                                                    <xsd:complexType>
+                                                        <xsd:simpleContent>
+                                                            <xsd:extension base="xsd:string">
+                                                                <xsd:attribute name="regexp" use="optional" default="false">
+                                                                    <xsd:simpleType>
+                                                                        <xsd:restriction base="xsd:string">
+                                                                            <xsd:enumeration value="true"/>
+                                                                            <xsd:enumeration value="false"/>
+                                                                        </xsd:restriction>
+                                                                    </xsd:simpleType>
+                                                                </xsd:attribute>
+                                                            </xsd:extension>
+                                                        </xsd:simpleContent>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </xsd:sequence>
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:choice>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:all>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:simpleType name="Tagger">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="brill"/>
+            <xsd:enumeration value="mbsp"/>
+            <xsd:enumeration value="none"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="Output">
+        <xsd:sequence>
+            <xsd:element name="sentenceDelimiters" minOccurs="0">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="standard"/>
+                        <xsd:enumeration value="newLine"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="wordDelimiter" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="tagger" type="Tagger"/>
+            <xsd:element name="predicateNames">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="predicate" type="Predicate" minOccurs="1" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Predicate">
+        <xsd:all>
+            <xsd:element name="identifier" type="xsd:string"/>
+            <xsd:element name="type">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="meta"/>
+                        <xsd:enumeration value="word"/>
+                        <xsd:enumeration value="tag"/>
+                        <xsd:enumeration value="chunk"/>
+                        <xsd:enumeration value="PNPchunk"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="comment" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="attributes">
+                <xsd:complexType>
+                    <xsd:choice maxOccurs="unbounded" minOccurs="1">
+                        <xsd:sequence>
+                            <xsd:element name="attribute" maxOccurs="unbounded" minOccurs="0">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:string">
+                                        <xsd:enumeration value="sid"/>
+                                        <xsd:enumeration value="wid"/>
+                                        <xsd:enumeration value="chid"/>
+                                        <xsd:enumeration value="wvalue"/>
+                                        <xsd:enumeration value="svalue"/>
+                                        <xsd:enumeration value="tag"/>
+                                        <xsd:enumeration value="cht"/>
+                                        <xsd:enumeration value="pnp"/>
+                                        <xsd:enumeration value="chuWord"/>
+                                        <xsd:enumeration value="pnp"/>
+                                        <xsd:enumeration value="pnep"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:sequence>
+                            <xsd:element name="metaAttribute" maxOccurs="unbounded" minOccurs="0" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:choice>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+</xsd:schema>

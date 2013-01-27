@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Shakespeare Preprocessor</title>
+<meta name="keywords" content="shakespeare, ilp, text mining, preprocessor" />
+<meta name="description" content="" />
+<link href="default.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="wrapper">
+<!-- start header -->
+<div id="header">
+	<div id="logo">
+		<h1><a href="index.html">Preprocessor<sup></sup></a></h1>
+		<h2>Projekt do předmětu PV056</h2>
+	</div>
+	<div id="menu">
+		<ul>
+			<li class="active"><a href="#">O projektu</a></li>
+			<li><a href="program.html">Program</a></li>
+			<li><a href="nastaveni.html">Nastavení</a></li>
+			<li><a href="download.html">Ke stažení</a></li>
+		</ul>
+	</div>
+</div>
+<!-- end header -->
+</div>
+
+<!-- start page -->
+<div id="page">
+<div class="bgtop">
+	<!-- start content -->
+	<div id="content">
+		<div class="post">
+			<h1 class="title">Informace o projektu</h1>
+			<div class="entry">
+				<p>Tento projekt vznikl pro účely předmětu PV056 Strojové učení a dobývání znalostí. Navazuje na práci Luboše Popelínského a Jiřího Materny <a href="http://nlp.fi.muni.cz/raslan/2007/papers/1.pdf">On key words and key patterns in Shakespeare's plays</a> a na <a href="stuff/znalosti09-7.pdf">Keyness in Shakespeare’s Plays</a> - práci Jiřího Materny, které se obě zabývají určováním "klíčovosti" v dílech Williama Shakespeara metodami strojového učení a ILP</a>.</p>
+<p>Náš tým je složen pouze ze dvou členů, a to mne (Jiří Kremser) a Jana Rygla. Samotné hledání znalostí v Hamletovi měl na starost Jan Rygl. Zaměřil se na závislosti času pronesení věty a na parametrech textu, více informací v jeho <a href="http://www.fi.muni.cz/~xrygl/PV056/index.html">části projektu</a>.</p>
+			</div>
+
+		</div>
+		<div class="post">
+			<h2 class="title">Shakespeare Preprocessor</h2>
+			<div class="entry">
+				<p>Mým úkolem bylo vytvořit preprocessor primárně pro formát, který vytvořil Mike Scott (více <a href="http://www.lexically.net/downloads/corpus_linguistics/">zde</a>). Snažil jsem se ale vytvořit nástroj obecnější, který si poradí i s jinak strukturovanými textovými daty. Součástí preprocessoru je také MBSP part-of-speech značkovač inspirovaný aplikací Petry Večeřové a Java wrapper implementace Brillova značkovače v jazyce C od Jimmy Lin, který vycházel zase z aplikace od Benjamin Han, který vylepšil E. Brillův originál. Oba značkovače jsou volně dostupné. Stejně jako preprocessor Petry Večeřové, využívá i moje aplikace perlový skript na http://lethe.fi.muni.cz/mbsp/mbsp.pl, který umí také rozdělit větu do menších logických celků (chunks a pnp chunks). Online dostupnost tohoto skriptu není nijak vysoká. Bohužel jsem nenašel příliš mnoho (konkrétně <a href="http://www.nactem.ac.uk/software/termine/webservice/">jeden</a> [orientovaný na proteiny, geny ...]) implementací značkovačů v podobě webových služeb. Existuje spousta ad hoc řešení v podobě perl/python/C programů, ale málo interoperatibilních řešení. To samozřejmě nejen stěžuje tvorbu programů pro text mining, ale i, dle mého názoru, celou tuto disciplínu brzdí. V kontextu sémantického webu jsou přitom webové služby společně s RDF a OWL skvělými prostředky.</p>
+			</div>
+			<p>Jako výchozí jazyk pro tvorbu aplikace jsem zvolil multiplatformní Javu. Aplikace vyžaduje Javu verze 6, kvůli podpoře XML bindingu, ale o tom více v části <a href="program.html">program</a>.</p>
+		</div>
+		
+		</div>
+	</div>
+	<!-- end content -->
+	<!-- start sidebar -->
+	<div id="sidebar">
+		<ul>
+		
+			<li>
+				<h2>Novinky</h2>
+				<ul>
+					<li><p><strong>[06/07/2009]<br></strong> Vytvořeny stránky projektu. </p></li>
+					<li><p><strong>[09/07/2009]<br></strong> Preprocessor načítá text podle pravidel. </p></li>
+					<li><p><strong>[11/07/2009]<br></strong> Tvorba programu v prologu je funkční. </p></li>
+					<li><p><strong>[12/07/2009]<br></strong> Podpora pro CLI. </p></li>
+					<li><p><strong>[18/08/2009]<br></strong> Opravena chyba se sentence ID. </p></li>
+				</ul>
+			</li>
+			<li>
+				<h2>Související odkazy</h2>
+				<ul>
+<li><a href="http://www.fi.muni.cz/~xrygl/PV056/index.html">Část Jana Rygla</a></li>
+					<li><a href="http://www.fi.muni.cz/usr/popelinsky/lectures/kdd/">Web předmětu <i>PV056</i></a></li>
+					<li><a href="http://oll.libertyfund.org/?option=com_staticxt&staticfile=show.php%3Fperson=29&Itemid=28">Shakespearovy hry</a></li>
+					<li><a href="http://www.lexically.net/downloads/corpus_linguistics/">Konverze her HTML -> XML</a></li>
+					<li><a href="http://nlp.fi.muni.cz/raslan/2007/papers/1.pdf">Projekt Jiřího Materny</a></li>
+					<li><a href="http://www.umiacs.umd.edu/~jimmylin/downloads/">Java wrapper Brill taggeru</a></li>
+					<li><a href="http://ucrel.lancs.ac.uk/acl/H/H92/H92-1022.pdf">Část disertace Erica Brilla</a></li>
+				</ul>
+			</li>
+			<li>
+				<h2>Technologie</h2>
+				<ul>
+					<li><a href="http://java.sun.com/developer/technicalArticles/WebServices/jaxb/">JAXB</a></li>
+					<li><a href="http://cs.wikipedia.org/wiki/Java_Native_Interface">JNI</a></li>
+					<li><a href="https://appframework.dev.java.net/">Swing Application Framework</a></li>
+					<li><a href="http://commons.apache.org/">Appache Commons</a></li>
+					<li><a href="http://www.netbeans.org/">Netbeans</a></li>
+					
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<!-- end sidebar -->
+	<div style="clear: both;">&nbsp;</div>
+</div>
+</div>
+
+<!-- end page -->
+<!-- start footer -->
+<div id="footer">
+	<p id="legal">(c) Jiří Kremser. Design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a></p>
+</div>
+<!-- end footer -->
+</body>
+</html>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+A priori types (could appear as attributes of a predicate): 
+sid     sentence ID 
+wid     word ID
+chid    chunk ID
+wvalue  word itself
+svalue  sentence itself
+tag     tag of word    tag(Spatio-temporal/JJ) = JJ
+cht     chunk type     cht([NP-SBJ-1 Spatio-temporal/JJ data/NNS mining/NN NP-SBJ-1]) = [NP,SBJ,1]
+pnp     in which (order) {PNP ... PNP} part it is located
+chuWord if it is a chunk or a word
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="config.xsd">
+    <name>Hamlet</name>
+    <input>
+        <tagger>none</tagger>
+        <ignore>
+            <firstXLines>6</firstXLines>
+            <lastXLines>0</lastXLines>
+            <linesStartWith>
+                <lineStartWith>#</lineStartWith>
+                <lineStartWith>//</lineStartWith>
+            </linesStartWith>
+            <valuesBetween>
+                <valueBetween>
+                    <initiator></initiator>
+                    <terminator></terminator>
+                </valueBetween>
+            </valuesBetween>
+            <SGMLTags>
+                <tag>STAGE DIR</tag>
+                <tag></tag>
+            </SGMLTags>
+        </ignore>
+        <metaTypes>
+            <metaType> <!-- hard-coded meta value -->
+                <type>string</type>
+                <key>author</key>
+                <value>William Shakespeare</value>
+            </metaType>
+            <metaType> <!-- hard-coded meta value -->
+                <type>string</type>
+                <key>genre</key>
+                <value>tragedy</value>
+            </metaType>
+            <metaType> <!-- hard-coded meta value -->
+                <type>string</type>
+                <key>title</key>
+                <value>Hamlet, Prince of Denmark</value>
+            </metaType>            
+            <metaType>
+                <type>number</type>
+                <key>act</key>
+                <value>matched</value>
+                <matches>
+                    <SGMLTags>
+                        <values>
+                            <value regexp="true">ACT \d+</value> <!-- \d as a digit (supported reg. expressions are: \d+ for number, \w+ for string) -->
+                        </values>
+                    </SGMLTags>
+                </matches>
+            </metaType>
+            <metaType>
+                <type>number</type>
+                <key>scene</key>
+                <value>matched</value>
+                <matches>
+                    <SGMLTags>
+                        <values>
+                            <value regexp="true">SCENE \d+</value>
+                        </values>
+                    </SGMLTags>
+                </matches>
+            </metaType>
+            <metaType>
+                <type>string</type>
+                <key>speaker</key>
+                <value>matched</value>
+                <matches>
+                    <SGMLTags>
+                        <file>
+                            config/hamletSpeakers.txt
+                        </file>
+                    </SGMLTags>
+                </matches>
+            </metaType>
+            <metaType>
+                <type>number</type>
+                <key>position</key>
+                <value>matched</value>
+                <matches>
+                    <SGMLTags>
+                        <values>
+                            <value regexp="true">\d+%</value> 
+                        </values>
+                    </SGMLTags>
+                </matches>
+            </metaType>
+        </metaTypes>
+    </input>
+
+    <output>
+        <sentenceDelimiters>newLine</sentenceDelimiters>
+        <wordDelimiter> </wordDelimiter>
+        <tagger>mbsp</tagger> <!-- if tagger is set to 'none', some attributes like tag, cht, pnp cannot be used as predicate attributes -->
+        <predicateNames>
+            <predicate> <!-- meta information -->
+                <identifier>m</identifier>
+                <type>meta</type>
+                <comment>svalue</comment>
+                <attributes>
+                    <attribute>sid</attribute>
+                    <metaAttribute>genre</metaAttribute>
+                    <metaAttribute>title</metaAttribute>
+                    <metaAttribute>speaker</metaAttribute> 
+                </attributes>
+            </predicate>
+            <predicate> <!-- meta information -->
+                <identifier>p</identifier>
+                <type>meta</type>
+                <attributes>
+                    <attribute>sid</attribute>
+                    <metaAttribute>act</metaAttribute>
+                    <metaAttribute>scene</metaAttribute> 
+                    <metaAttribute>position</metaAttribute> 
+                </attributes>
+            </predicate>
+            <predicate> <!-- word information -->
+                <identifier>w</identifier>
+                <type>word</type>
+                <comment></comment>
+                <attributes>
+                    <attribute>sid</attribute>
+                    <attribute>wid</attribute>
+                    <attribute>wvalue</attribute>
+                </attributes>
+            </predicate>
+            <predicate> <!-- tag -->
+                <identifier>t</identifier>
+                <type>tag</type>
+                <comment>tag</comment>
+                <attributes>
+                    <attribute>sid</attribute>
+                    <attribute>wid</attribute>
+                    <attribute>tag</attribute>
+                </attributes>
+            </predicate>
+            <predicate> <!-- chunk -->
+                <identifier>c</identifier>
+                <type>chunk</type>
+                <attributes>
+                    <attribute>sid</attribute>
+                    <attribute>chid</attribute>
+                    <attribute>wid</attribute>
+                    <attribute>cht</attribute>
+                </attributes>
+            </predicate>
+            <predicate> <!-- PNP chunk -->
+                <identifier>pnp</identifier>
+                <type>PNPchunk</type>
+                <attributes>
+                    <attribute>sid</attribute>
+                    <attribute>chid</attribute>
+                    <attribute>wid</attribute>
+                    <attribute>cht</attribute>
+                </attributes>
+            </predicate>
+        </predicateNames>
+    </output>
+</config>
